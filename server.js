@@ -36,7 +36,15 @@ app.post("/response", async (req, res) => {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        model: "gpt-4o-mini",
+        {
+  role: "system",
+  content: `
+Rispondi SEMPRE in italiano.
+Risposte MOLTO BREVI (massimo 1 frase).
+Tono naturale da ristorante.
+Fai UNA domanda alla volta.
+`
+}
         messages: [
           {
   role: "system",
