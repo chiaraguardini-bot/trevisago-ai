@@ -19,7 +19,9 @@ app.get("/", (req, res) => {
 app.post("/incoming-call", (req, res) => {
   const twiml = `<?xml version="1.0" encoding="UTF-8"?>
 <Response>
-  <Say>Benvenuto al ristorante Trevisago</Say>
+  <Say language="it-IT" voice="alice">
+Benvenuto al ristorante pizzeria Trevisago. Come posso aiutarti?
+</Say>
 </Response>`;
   res.type("text/xml");
   res.send(twiml);
