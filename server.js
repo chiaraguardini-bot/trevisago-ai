@@ -12,7 +12,7 @@ app.post("/incoming-call", (req, res) => {
   res.type("text/xml");
   res.send(`
     <Response>
-      <Gather input="speech" language="it-IT" action="/response" method="POST">
+      <Gather input="speech" language="it-IT" action="/response" method="POST" timeout="5">
         <Say language="it-IT" voice="alice">
           Ciao! Come posso aiutarti?
         </Say>
