@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 import express from "express";
 import http from "http";
-import fetch from "node-fetch";
+const fetch = global.fetch;
 
 dotenv.config();
 
