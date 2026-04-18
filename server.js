@@ -11,15 +11,16 @@ const fetch = global.fetch;
 app.post("/incoming-call", (req, res) => {
   res.type("text/xml");
   res.send(`
-    <Response>
-      <Gather input="speech" language="it-IT" action="/response" method="POST" timeout="5">
-        <Say language="it-IT" voice="alice">
-          Ciao! Come posso aiutarti?
-        </Say>
-      </Gather>
-    </Response>
-  `);
-});
+    res.send(`
+  <Response>
+    <Gather input="speech" language="it-IT" action="/response" method="POST" timeout="5">
+      <Say language="it-IT" voice="alice">
+        ${aiResponse}
+      </Say>
+    </Gather>
+    <Say language="it-IT">Non ho sentito nulla</Say>
+  </Response>
+`);
 
 // 👉 RISPOSTA AI + LOOP (NON CADE LA CHIAMATA)
 app.post("/response", async (req, res) => {
