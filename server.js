@@ -15,14 +15,32 @@ const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 app.get("/", (req, res) => {
   res.send("OK");
 });
-
 app.post("/incoming-call", (req, res) => {
   const twiml = `<?xml version="1.0" encoding="UTF-8"?>
 <Response>
-  <Say language="it-IT" voice="alice">
-Benvenuto al ristorante pizzeria Trevisago. Come posso aiutarti?
-</Say>
+  <Gather input="speech" action="/response" method="POST">
+    <Say language="it-IT" voice="alice">
+      Benvenuto al ristorante pizzeria Trevisago. Come posso aiutarti?
+    </Say>
+  </Gather>
 </Response>`;
+
+  res.type("text/xml");
+  res.send(twiml);
+});
+app.post("/incoming-call", (req, res) => {
+  const twiml = `<?xml version="1.0" encoding="UTF-8"?>
+<Response>
+  <Gather input="speech" action="/response" method="POST">
+    <Say language="it-IT" voice="alice">
+      Benvenuto al ristorante pizzeria Trevisago. Come posso aiutarti?
+    </Say>
+  </Gather>
+</Response>`;
+
+  res.type("text/xml");
+  res.send(twiml);
+});
   res.type("text/xml");
   res.send(twiml);
 });
