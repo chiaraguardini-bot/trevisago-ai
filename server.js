@@ -1,7 +1,6 @@
 import express from "express";
 
 const app = express();
-
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
@@ -21,8 +20,9 @@ app.post("/incoming-call", (_req, res) => {
     language="it-IT"
     action="/response"
     method="POST"
-    timeout="3"
-    speechTimeout="auto">
+    timeout="4"
+    speechTimeout="auto"
+    actionOnEmptyResult="true">
     <Say language="it-IT" voice="alice">
       Buongiorno, Ristorante Pizzeria Trevisago. Come posso aiutarla?
     </Say>
@@ -47,8 +47,9 @@ app.post("/response", async (req, res) => {
     language="it-IT"
     action="/response"
     method="POST"
-    timeout="3"
-    speechTimeout="auto">
+    timeout="4"
+    speechTimeout="auto"
+    actionOnEmptyResult="true">
     <Say language="it-IT" voice="alice">
       Mi scusi, non ho sentito bene. Può ripetere?
     </Say>
@@ -64,21 +65,22 @@ app.post("/response", async (req, res) => {
       method: "POST",
       headers: {
         Authorization: `Bearer ${OPENAI_API_KEY}`,
-        "Content-Type": "application/json",
+        "Content-Type": "application/json"
       },
       body: JSON.stringify({
         model: "gpt-4o-mini",
-        temperature: 0.4,
-        max_tokens: 80,
+        temperature: 0.3,
+        max_tokens: 70,
         messages: [
           {
             role: "system",
             content: `
 Rispondi SEMPRE e SOLO in italiano.
+Non usare MAI l'inglese.
 Sei l'assistente telefonico del Ristorante Pizzeria Trevisago.
 
-Parla in modo naturale, cortese e molto breve.
-Massimo una o due frasi corte.
+Parla in modo naturale, cordiale e molto breve.
+Massimo una frase o due frasi corte.
 Fai una sola domanda alla volta.
 Non usare elenchi.
 Non dire mai di essere un'intelligenza artificiale.
@@ -95,21 +97,21 @@ REGOLE:
 - Se chiede il martedì a pranzo, spiega che siete chiusi.
 - Se non capisci, chiedi gentilmente di ripetere.
 - Dai risposte brevi e veloci, adatte a una telefonata.
-`,
+`
           },
           {
             role: "user",
-            content: userInput,
-          },
-        ],
-      }),
+            content: userInput
+          }
+        ]
+      })
     });
 
     const data = await openaiRes.json();
 
     if (data.error) {
       console.error("Errore OpenAI:", data.error);
-      aiResponse = "Mi scusi, in questo momento ho un problema tecnico. Può ripetere tra un attimo?";
+      aiResponse = "Mi scusi, ho un piccolo problema tecnico. Può ripetere?";
     } else {
       aiResponse =
         data.choices?.[0]?.message?.content?.trim() ||
@@ -117,8 +119,8 @@ REGOLE:
 
       aiResponse = aiResponse.replace(/\s+/g, " ").trim();
 
-      if (aiResponse.length > 220) {
-        aiResponse = aiResponse.slice(0, 220);
+      if (aiResponse.length > 180) {
+        aiResponse = aiResponse.slice(0, 180);
       }
     }
   } catch (error) {
@@ -133,8 +135,9 @@ REGOLE:
     language="it-IT"
     action="/response"
     method="POST"
-    timeout="3"
-    speechTimeout="auto">
+    timeout="4"
+    speechTimeout="auto"
+    actionOnEmptyResult="true">
     <Say language="it-IT" voice="alice">
       ${escapeForXml(aiResponse)}
     </Say>
