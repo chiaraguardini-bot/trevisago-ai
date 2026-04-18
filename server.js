@@ -57,8 +57,7 @@ Fai UNA domanda alla volta.
 
     const data = await openaiRes.json();
 
-    aiResponse = data.choices?.[0]?.message?.content || "Scusa, non ho capito";
-  } catch (error) {
+   aiResponse = aiResponse.split(".")[0];
     console.error("Errore OpenAI:", error);
     aiResponse = "C'è stato un problema";
   }
